@@ -7,28 +7,46 @@
 // clang-format off
 enum layers {
     _QWERTY,
-    _SYMBOLS
+    _SYMBOLS,
+    _NUMBERS
 };
 
 #define SYMBOLS MO(_SYMBOLS)
+#define LA(X) MT(MOD_LALT, X)
+#define LG(X) MT(MOD_LGUI, X)
+#define LS(X) MT(MOD_LSFT, X)
+#define LC(X) MT(MOD_LCTL, X)
+#define RA(X) MT(MOD_RALT, X)
+#define RG(X) MT(MOD_RGUI, X)
+#define RS(X) MT(MOD_RSFT, X)
+#define RC(X) MT(MOD_RCTL, X)
+#define T2(X) LT(_NUMBERS, X)
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_QWERTY] = LAYOUT(
-  KC_ESC,   KC_1,   KC_2,    KC_3,    KC_4,    KC_5,                       KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
-  KC_TAB,   KC_Q,   KC_W,    KC_E,    KC_R,    KC_T,                       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_ENT,
-  KC_LCTL,  KC_A,   KC_S,    KC_D,    KC_F,    KC_G,                       KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN,  KC_RCTL,
-  KC_LSFT,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_LBRC,  KC_RBRC, KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,  KC_RSFT,
-                          KC_LALT,    KC_LGUI, SYMBOLS,  KC_SPC,   KC_SPC, SYMBOLS, KC_RGUI, KC_RALT
+  KC_ESC,   KC_1,      KC_2,      KC_3,      KC_4,      KC_5,                             KC_6,      KC_7,     KC_8,       KC_9,      KC_0,       KC_BSPC,
+  KC_TAB,   KC_Q,      KC_W,      KC_E,      KC_R,      KC_T,                             KC_Y,      KC_U,     KC_I,       KC_O,      KC_P,       KC_ENT,
+  KC_LCTL,  LA(KC_A),  LS(KC_S),  LG(KC_D),  LC(KC_F),  T2(KC_G),                         T2(KC_H),  RC(KC_J), RG(KC_K),   RS(KC_L),  RA(KC_SCLN),KC_RCTL,
+  KC_LSFT,  KC_Z,      KC_X,      T2(KC_C),  KC_V,      KC_B,      KC_LBRC,  KC_RBRC,     KC_N,      KC_M,     T2(KC_COMM),KC_DOT,    KC_SLSH,    KC_RSFT,
+                                  KC_LALT,   KC_LGUI,   SYMBOLS,   KC_ENT,   KC_SPC,      SYMBOLS,   KC_RGUI,  KC_RALT
 ),
 
 [_SYMBOLS] = LAYOUT(
-  KC_F12,  KC_F1,   KC_F2,   KC_F3,  KC_F4,   KC_F5,                       KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,
-  _______, KC_LBRC, KC_LT,   KC_GT,  KC_RBRC, KC_TILD,                     KC_PIPE, KC_GRV,  KC_QUOT, KC_DQUO, KC_PGUP, _______,
-  _______, KC_LCBR, KC_LPRN, KC_RPRN, KC_RCBR, KC_DEL,                     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_PGDN, _______,
-  _______, _______, _______, _______, _______, _______, _______, _______,  KC_EQL,  KC_UNDS, KC_MINS, KC_PLUS, KC_BSLS, _______,
-                             _______, _______, KC_ESC,  KC_BSPC, KC_BSPC,  KC_ESC,  _______, _______
+  KC_F12,    KC_F1,     KC_F2,     KC_F3,     KC_F4,     KC_F5,                           KC_F6,     KC_F7,     KC_F8,     KC_F9,     KC_F10,     KC_F11,
+  _______,   KC_LBRC,   KC_LT,     KC_GT,     KC_RBRC,   KC_TILD,                         KC_PIPE,   KC_GRV,    KC_QUOT,   KC_DQUO,   KC_PGUP,    _______,
+  _______,   KC_LCBR,   KC_LPRN,   KC_RPRN,   KC_RCBR,   KC_DEL,                          KC_LEFT,   KC_DOWN,   KC_UP,     KC_RGHT,   KC_PGDN,    _______,
+  _______,   _______,   S(KC_8),   S(KC_7),   S(KC_6),   _______,   _______,   _______,   KC_EQL,    KC_UNDS,   KC_MINS,   KC_PLUS,   KC_BSLS,    _______,
+                                   _______,   _______,   KC_ESC,    KC_DEL,    KC_BSPC,   KC_ESC,    _______,   _______
+),
+
+[_NUMBERS] = LAYOUT(
+  _______,   _______,   _______,   _______,   _______,   _______,                         _______,   _______,   _______,   _______,   _______,    _______,
+  _______,   S(KC_1),   S(KC_2),   S(KC_3),   S(KC_4),   S(KC_5),                         _______,   KC_1,      KC_2,      KC_3,      KC_4,       _______,
+  _______,   S(KC_5),   S(KC_6),   S(KC_7),   S(KC_8),   _______,                         _______,   KC_5,      KC_6,      KC_7,      KC_8,       _______,
+  _______,   _______,   _______,   _______,   _______,   _______,   _______,   _______,   _______,   KC_9,      KC_0,      _______,   _______,    _______,
+                                   _______,   _______,   _______,   _______,   _______,   _______,   _______,   _______
 )
 };
 
@@ -57,15 +75,92 @@ static void render_infinity_logo(void) {
     oled_write_raw_P(raw_logo, sizeof(raw_logo));
 }
 
+/*
 static void render_lulu_logo(void) {
     oled_write_raw_P(bs_logo_img, sizeof(bs_logo_img));
+}
+*/
+
+void memcpy_auto_inc( char **pp_dest, const void *src, size_t count )
+{
+    memcpy( *pp_dest, src, count );
+    *pp_dest += count;
+}
+
+#define ICON_SZ (128)
+#define N_ICONS (3)
+static void render_layer_info(void) {
+    static const char PROGMEM zero_row[32] = {[0 ... 31] = 0};
+    static const char PROGMEM border_top[32] = {255, [1 ... 30] = 1, 255};
+    static const char PROGMEM border_btm[32] = {255, [1 ... 30] = 128, 255};
+
+    static const char PROGMEM icons[N_ICONS][2][ICON_SZ] = {
+        {
+            {
+                255,  0,  0,  0,  0,  0,  0,  0,128,224,240,248,248,248,120,120,120,248,248,240,224,192,  0,  0,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,248,255,255,255,255,255,  0,  0,  0,  0,  1,255,255,255,255,254,  0,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0, 15, 63,127,127,255,248,240,240,240,252,255,255, 63, 31,  3,  0,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  7, 15, 31, 31, 30, 28, 24,  0,  0,  0,  0,  0,  0,  0,  255
+            },
+            {
+                255,  0,  0,  0,  0,255,255,255,255,127, 31, 15, 15,135,199,199,199,143, 15, 31, 63,255,255,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,  3,  0,  0,  0,255,255,255,255,255,255,252,  0,  0,  0,255,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,254,240,192,128,135, 15, 31, 31, 31, 15,  1,192,224,248,255,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,255,255,255,255,255,255,255,255,255,252,248,240,241,243,255,255,255,255,255,  0,  0,  0,  0,  255
+            }
+        },
+        {
+            {
+                255,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,128,192,192,192,192,192,192,192,192,192,128,  0,  0,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0,  0,126,255,255,255,255,227,227,195,195,131,131,135,  7,  0,  0,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0,  0,224,192,193,129,131,131,131,135,135,255,255,255,255,254, 48,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0,  0,  3,  3,  7,  7,  7,  7,  7,  7,  7,  7,  7,  3,  3,  1,  0,  0,  0,  0,  0,  0,  0,  0,  255
+            },
+            {
+                255,  0,  0,  0,  0,255,255,255,255,255,255,255,127,127, 63, 63, 63, 63, 63,127,127,127,255,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,255,255,129,  0,  0, 28, 62, 62,126,126,126,252,252,252,255,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,255,255,127,127,127,254,254,252,252,252,120,  0,  0,  1,135,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,255,255,252,252,252,248,248,248,248,248,252,252,252,254,255,255,255,255,255,  0,  0,  0,  0,  255
+            }
+        },
+        {
+            {
+                255,  0,  0,  0,  0,  0,  0,  0,  0,192,192,192,192,192,128,  0,  0,  0,  0,192,192,192,192,192,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0,  0,255,255,255,255,127,255,252,240,128,  0,255,255,255,255,255,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0,  0,255,255,255,255,  0,  1, 15, 63,255,252,255,255,255,255,255,  0,  0,  0,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,  0,  0,  0,  0,  7,  7,  7,  7,  0,  0,  0,  0,  1,  7,  7,  7,  7,  7,  7,  0,  0,  0,  0,  0,  0,  0,  255
+            },
+            {
+                255,  0,  0,  0,  0,255,255,255,255,255, 63, 63, 63,127,255,255,255,255,255,255, 63, 63, 63,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,255,255,  0,  0,240,240,129, 15,127,255,255,255,  0,  0,  0,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,255,255,  0,  0,255,255,255,252,240,129, 15, 31,  0,  0,  0,255,255,255,255,  0,  0,  0,  0,  255,
+                255,  0,  0,  0,  0,255,255,255,255,255,248,248,255,255,255,255,255,255,254,248,248,248,248,255,255,255,255,  0,  0,  0,  0,  255
+            }
+        }
+    };
+
+    uint8_t curr_layer = get_highest_layer(layer_state);
+
+    char PROGMEM img[32 * 16];
+    memset(img, 0, sizeof(img));
+    char PROGMEM* img_ptr = img;
+
+    memcpy_auto_inc(&img_ptr, zero_row, sizeof(zero_row));
+    memcpy_auto_inc(&img_ptr, border_top, sizeof(border_top));
+    for (int i = 0; i < N_ICONS; i++) {
+        memcpy_auto_inc(&img_ptr, icons[i][(int) (curr_layer == i)], sizeof(icons[0][0]));
+    }
+    memcpy_auto_inc(&img_ptr, border_btm, sizeof(border_btm));
+    memcpy_auto_inc(&img_ptr, zero_row, sizeof(zero_row));
+    oled_write_raw_P(img, sizeof(img));
+
 }
 
 bool oled_task_user(void) {
     if (is_keyboard_master()) {
-        render_infinity_logo();
+        render_layer_info();
     } else {
-        render_lulu_logo();
+        render_infinity_logo();
     }
     return false;
 }
