@@ -25,11 +25,12 @@ enum layers {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
+
 [_QWERTY] = LAYOUT(
   KC_ESC,   KC_1,      KC_2,      KC_3,      KC_4,      KC_5,                             KC_6,      KC_7,     KC_8,       KC_9,      KC_0,       KC_BSPC,
   KC_TAB,   KC_Q,      KC_W,      KC_E,      KC_R,      KC_T,                             KC_Y,      KC_U,     KC_I,       KC_O,      KC_P,       KC_ENT,
   KC_LCTL,  LA(KC_A),  LS(KC_S),  LG(KC_D),  LC(KC_F),  T2(KC_G),                         T2(KC_H),  RC(KC_J), RG(KC_K),   RS(KC_L),  RA(KC_SCLN),KC_RCTL,
-  KC_LSFT,  KC_Z,      KC_X,      T2(KC_C),  KC_V,      KC_B,      KC_LBRC,  KC_RBRC,     KC_N,      KC_M,     T2(KC_COMM),KC_DOT,    KC_SLSH,    KC_RSFT,
+  KC_LSFT,  KC_Z,      T2(KC_X),  LC(KC_C),  KC_V,      KC_B,      KC_LBRC,  KC_RBRC,     KC_N,      KC_M,     LC(KC_COMM),T2(KC_DOT),KC_SLSH,    KC_RSFT,
                                   KC_LALT,   KC_LGUI,   SYMBOLS,   KC_ENT,   KC_SPC,      SYMBOLS,   KC_RGUI,  KC_RALT
 ),
 
@@ -90,6 +91,9 @@ void memcpy_auto_inc( char **pp_dest, const void *src, size_t count )
 #define ICON_SZ (128)
 #define N_ICONS (3)
 static void render_layer_info(void) {
+
+    static char PROGMEM img[32 * 16];  // Final image to be produced
+
     static const char PROGMEM zero_row[32] = {[0 ... 31] = 0};
     static const char PROGMEM border_top[32] = {255, [1 ... 30] = 1, 255};
     static const char PROGMEM border_btm[32] = {255, [1 ... 30] = 128, 255};
@@ -141,10 +145,7 @@ static void render_layer_info(void) {
 
     uint8_t curr_layer = get_highest_layer(layer_state);
 
-    char PROGMEM img[32 * 16];
-    memset(img, 0, sizeof(img));
     char PROGMEM* img_ptr = img;
-
     memcpy_auto_inc(&img_ptr, zero_row, sizeof(zero_row));
     memcpy_auto_inc(&img_ptr, border_top, sizeof(border_top));
     for (int i = 0; i < N_ICONS; i++) {
